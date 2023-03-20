@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
 import { Header } from 'react-native-elements';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import db from "./db_1.json"
@@ -37,8 +37,12 @@ export default class App extends React.Component {
           <TouchableOpacity
             style={styles.goButton}
             onPress={() => {
-              this.setState({ chunks: db[this.state.text].chunks });
-              this.setState({ phones: db[this.state.text].phones});
+              var word = this.state.text.toLowerCase().trim()
+              db[word] ? (
+              this.setState({ chunks: db[word].chunks }),
+              this.setState({ phones: db[word].phones}))
+              : Alert.alert("Opa a palavra não conseguiu ser encontrada :(  ")
+
             }}>
             <Text style={styles.buttonText}>IR</Text>
           </TouchableOpacity>
@@ -48,6 +52,7 @@ export default class App extends React.Component {
               <ChunksButton
                 wordChunk = {this.state.chunks[index]}
                 wordPhone = {this.state.phones[index]}
+                buttonIndex = {index}
               />
             )
            })} 
